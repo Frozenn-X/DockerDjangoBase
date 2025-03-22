@@ -1,0 +1,664 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DockerDjangoBase</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --color-primary: #2563eb;
+            --color-primary-dark: #1d4ed8;
+            --color-secondary: #475569;
+            --color-accent: #0ea5e9;
+            --color-text: #1e293b;
+            --color-text-light: #64748b;
+            --color-bg: #f8fafc;
+            --color-bg-dark: #e2e8f0;
+            --color-bg-code: #f1f5f9;
+            --color-border: #cbd5e1;
+            --font-sans: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen,
+                Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+            --font-mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, 
+                "Liberation Mono", "Courier New", monospace;
+            --radius: 8px;
+            --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+            --shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+            --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: var(--font-sans);
+            line-height: 1.6;
+            color: var(--color-text);
+            background-color: var(--color-bg);
+            padding-bottom: 4rem;
+        }
+
+        .container {
+            max-width: 1100px;
+            margin: 0 auto;
+            padding: 0 1.5rem;
+        }
+
+        header {
+            background: linear-gradient(to right, var(--color-primary), var(--color-accent));
+            color: white;
+            padding: 4rem 0 6rem;
+            position: relative;
+            overflow: hidden;
+        }
+
+        header::after {
+            content: '';
+            position: absolute;
+            bottom: -5%;
+            left: 0;
+            width: 100%;
+            height: 10vh;
+            background: var(--color-bg);
+            clip-path: ellipse(50% 60% at 50% 100%);
+        }
+
+        .header-content {
+            position: relative;
+            z-index: 10;
+        }
+
+        .hero {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+        }
+
+        h1 {
+            font-size: 3.5rem;
+            font-weight: 800;
+            margin-bottom: 0.5rem;
+            letter-spacing: -0.025em;
+        }
+
+        .tagline {
+            font-size: 1.5rem;
+            opacity: 0.9;
+            margin-bottom: 2rem;
+            font-weight: 400;
+        }
+
+        .buttons {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 2rem;
+        }
+
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            padding: 0.75rem 1.5rem;
+            border-radius: var(--radius);
+            font-weight: 600;
+            text-decoration: none;
+            transition: all 0.2s ease;
+        }
+
+        .btn-primary {
+            background-color: white;
+            color: var(--color-primary);
+        }
+
+        .btn-primary:hover {
+            background-color: rgba(255, 255, 255, 0.9);
+            transform: translateY(-2px);
+        }
+
+        .btn-secondary {
+            background-color: rgba(255, 255, 255, 0.1);
+            color: white;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .btn-secondary:hover {
+            background-color: rgba(255, 255, 255, 0.2);
+            transform: translateY(-2px);
+        }
+
+        .btn i {
+            margin-right: 0.5rem;
+        }
+
+        .shields {
+            display: flex;
+            gap: 0.75rem;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+
+        .shield {
+            display: inline-flex;
+            align-items: center;
+            padding: 0.375rem 0.75rem;
+            border-radius: 4px;
+            font-size: 0.875rem;
+            font-weight: 500;
+            line-height: 1;
+            background-color: rgba(255, 255, 255, 0.2);
+            color: white;
+        }
+
+        .shield i {
+            margin-right: 0.5rem;
+        }
+
+        .content {
+            margin-top: -4rem;
+            position: relative;
+            z-index: 20;
+        }
+
+        .card {
+            background-color: white;
+            border-radius: var(--radius);
+            overflow: hidden;
+            box-shadow: var(--shadow);
+            margin-bottom: 2rem;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: var(--shadow-lg);
+        }
+
+        .card-header {
+            padding: 1.5rem;
+            border-bottom: 1px solid var(--color-border);
+        }
+
+        .card-body {
+            padding: 1.5rem;
+        }
+
+        h2 {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--color-primary);
+            margin-bottom: 1rem;
+        }
+
+        h3 {
+            font-size: 1.25rem;
+            font-weight: 600;
+            margin-bottom: 0.75rem;
+            display: flex;
+            align-items: center;
+        }
+
+        h3 i {
+            margin-right: 0.75rem;
+            color: var(--color-primary);
+        }
+
+        p {
+            margin-bottom: 1.5rem;
+            color: var(--color-text);
+        }
+
+        ul, ol {
+            margin-bottom: 1.5rem;
+            padding-left: 1.5rem;
+        }
+
+        li {
+            margin-bottom: 0.5rem;
+        }
+
+        code {
+            font-family: var(--font-mono);
+            background-color: var(--color-bg-code);
+            padding: 0.2rem 0.4rem;
+            border-radius: 3px;
+            font-size: 0.875em;
+            border: 1px solid var(--color-border);
+        }
+
+        pre {
+            background-color: var(--color-bg-code);
+            padding: 1rem;
+            border-radius: var(--radius);
+            border: 1px solid var(--color-border);
+            overflow-x: auto;
+            margin-bottom: 1.5rem;
+        }
+
+        pre code {
+            background-color: transparent;
+            padding: 0;
+            border: none;
+        }
+
+        .technologies {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+            gap: 1.5rem;
+            margin-top: 2rem;
+        }
+
+        .tech-card {
+            background-color: white;
+            border-radius: var(--radius);
+            padding: 1.5rem;
+            box-shadow: var(--shadow-sm);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            transition: transform 0.2s ease;
+        }
+
+        .tech-card:hover {
+            transform: translateY(-5px);
+        }
+
+        .tech-icon {
+            width: 64px;
+            height: 64px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 1rem;
+            font-size: 2.5rem;
+            color: var(--color-primary);
+            background-color: var(--color-bg);
+            border-radius: 50%;
+            padding: 0.75rem;
+        }
+
+        .tech-name {
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+        }
+
+        .tech-desc {
+            text-align: center;
+            font-size: 0.875rem;
+            color: var(--color-text-light);
+        }
+
+        .steps-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            gap: 1.5rem;
+            margin-top: 1.5rem;
+        }
+
+        .step-card {
+            position: relative;
+            background-color: white;
+            border-radius: var(--radius);
+            padding: 1.5rem;
+            box-shadow: var(--shadow-sm);
+        }
+
+        .step-number {
+            position: absolute;
+            top: -15px;
+            left: -15px;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background-color: var(--color-primary);
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            font-size: 1.25rem;
+            box-shadow: var(--shadow-sm);
+        }
+
+        .step-title {
+            font-weight: 600;
+            margin-bottom: 0.75rem;
+            padding-left: 1.5rem;
+        }
+
+        .step-content {
+            color: var(--color-text);
+        }
+
+        .command {
+            background-color: #1e1e1e;
+            color: #d4d4d4;
+            padding: 0.75rem 1rem;
+            border-radius: var(--radius);
+            font-family: var(--font-mono);
+            margin: 0.75rem 0;
+            position: relative;
+            border-left: 4px solid var(--color-primary);
+        }
+
+        .command-copy {
+            position: absolute;
+            top: 0.5rem;
+            right: 0.5rem;
+            cursor: pointer;
+            background: none;
+            border: none;
+            color: #999;
+            font-size: 0.875rem;
+        }
+
+        .command-copy:hover {
+            color: white;
+        }
+
+        .footer {
+            text-align: center;
+            padding: 2rem 0;
+            margin-top: 4rem;
+            border-top: 1px solid var(--color-border);
+            color: var(--color-text-light);
+        }
+
+        /* Responsive adjustments */
+        @media (max-width: 768px) {
+            h1 {
+                font-size: 2.5rem;
+            }
+
+            .tagline {
+                font-size: 1.25rem;
+            }
+
+            .buttons {
+                flex-direction: column;
+            }
+
+            .steps-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="container header-content">
+            <div class="hero">
+                <h1>DockerDjangoBase</h1>
+                <p class="tagline">Environnement de développement Django avec Docker, MySQL et MongoDB</p>
+                
+                <div class="buttons">
+                    <a href="/auth/" class="btn btn-primary">
+                        <i class="fas fa-lock"></i> API d'authentification
+                    </a>
+                    <a href="https://github.com/yourusername/DockerDjangoBase" class="btn btn-secondary">
+                        <i class="fab fa-github"></i> Voir sur GitHub
+                    </a>
+                </div>
+                
+                <div class="shields">
+                    <span class="shield"><i class="fab fa-python"></i> Python 3.11</span>
+                    <span class="shield"><i class="fab fa-django"></i> Django 5.1.5</span>
+                    <span class="shield"><i class="fab fa-docker"></i> Docker</span>
+                    <span class="shield"><i class="fas fa-database"></i> MySQL 8</span>
+                    <span class="shield"><i class="fas fa-database"></i> MongoDB</span>
+                </div>
+            </div>
+        </div>
+    </header>
+    
+    <div class="container content">
+        <div class="card">
+            <div class="card-header">
+                <h2>À propos du projet</h2>
+            </div>
+            <div class="card-body">
+                <p>
+                    DockerDjangoBase est un projet starter pour le développement d'applications web Django modernes
+                    avec une configuration Docker prête à l'emploi. Il intègre à la fois MySQL et MongoDB pour offrir
+                    une flexibilité maximale dans la gestion des données.
+                </p>
+                
+                <div class="technologies">
+                    <div class="tech-card">
+                        <div class="tech-icon">
+                            <i class="fab fa-django"></i>
+                        </div>
+                        <h4 class="tech-name">Django</h4>
+                        <p class="tech-desc">Framework web Python puissant pour un développement rapide et propre</p>
+                    </div>
+                    
+                    <div class="tech-card">
+                        <div class="tech-icon">
+                            <i class="fab fa-docker"></i>
+                        </div>
+                        <h4 class="tech-name">Docker</h4>
+                        <p class="tech-desc">Environnement de développement isolé et reproductible</p>
+                    </div>
+                    
+                    <div class="tech-card">
+                        <div class="tech-icon">
+                            <i class="fas fa-database"></i>
+                        </div>
+                        <h4 class="tech-name">MySQL</h4>
+                        <p class="tech-desc">Base de données relationnelle pour les données structurées</p>
+                    </div>
+                    
+                    <div class="tech-card">
+                        <div class="tech-icon">
+                            <i class="fas fa-server"></i>
+                        </div>
+                        <h4 class="tech-name">MongoDB</h4>
+                        <p class="tech-desc">Base de données NoSQL pour les données non structurées</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="card">
+            <div class="card-header">
+                <h2>Fonctionnalités</h2>
+            </div>
+            <div class="card-body">
+                <ul>
+                    <li><strong>Configuration Django prête à l'emploi</strong> avec structure de projet optimisée</li>
+                    <li><strong>Docker et docker-compose intégrés</strong> pour un environnement isolé et reproductible</li>
+                    <li><strong>Base de données MySQL</strong> pour les données relationnelles</li>
+                    <li><strong>Base de données MongoDB</strong> pour les données non structurées</li>
+                    <li><strong>API REST</strong> avec Django Rest Framework</li>
+                    <li><strong>Système d'authentification personnalisé</strong> avec gestion de tokens</li>
+                    <li><strong>Multiple bases de données</strong> avec configuration optimisée</li>
+                </ul>
+            </div>
+        </div>
+        
+        <div class="card">
+            <div class="card-header">
+                <h2>Démarrage rapide</h2>
+            </div>
+            <div class="card-body">
+                <h3><i class="fas fa-rocket"></i> Cloner et démarrer</h3>
+                <p>Pour démarrer avec ce projet, assurez-vous d'avoir Docker et docker-compose installés, puis exécutez:</p>
+                
+                <div class="command">
+                    git clone https://github.com/yourusername/DockerDjangoBase.git
+                    <button class="command-copy" onclick="navigator.clipboard.writeText('git clone https://github.com/yourusername/DockerDjangoBase.git')">
+                        <i class="far fa-clipboard"></i>
+                    </button>
+                </div>
+                
+                <div class="command">
+                    cd DockerDjangoBase
+                    <button class="command-copy" onclick="navigator.clipboard.writeText('cd DockerDjangoBase')">
+                        <i class="far fa-clipboard"></i>
+                    </button>
+                </div>
+                
+                <div class="command">
+                    docker-compose up -d
+                    <button class="command-copy" onclick="navigator.clipboard.writeText('docker-compose up -d')">
+                        <i class="far fa-clipboard"></i>
+                    </button>
+                </div>
+                
+                <p>L'application sera disponible à l'adresse: <code>http://localhost:8000</code></p>
+                <p>L'API d'authentification est accessible via: <code>/auth/</code></p>
+            </div>
+        </div>
+        
+        <div class="card">
+            <div class="card-header">
+                <h2>Modes de déploiement</h2>
+            </div>
+            <div class="card-body">
+                <div class="card-body">
+                    <div class="steps-grid">
+                        <div class="step-card">
+                            <h3><i class="fas fa-code"></i> Mode développement</h3>
+                            <p>Utilise le serveur de développement intégré à Django :</p>
+                            <div class="command">
+                                python manage.py runserver 0.0.0.0:8000
+                                <button class="command-copy" onclick="navigator.clipboard.writeText('python manage.py runserver 0.0.0.0:8000')">
+                                    <i class="far fa-clipboard"></i>
+                                </button>
+                            </div>
+                            <ul>
+                                <li>Rechargement automatique du code</li>
+                                <li>Débogage facilité</li>
+                                <li>Messages d'erreur détaillés</li>
+                            </ul>
+                            <p><strong>Actuellement actif dans le projet</strong></p>
+                        </div>
+                        
+                        <div class="step-card">
+                            <h3><i class="fas fa-server"></i> Mode production (WSGI)</h3>
+                            <p>Utilise Gunicorn comme serveur WSGI :</p>
+                            <div class="command">
+                                gunicorn core.wsgi:application --bind 0.0.0.0:8000 --workers 3
+                                <button class="command-copy" onclick="navigator.clipboard.writeText('gunicorn core.wsgi:application --bind 0.0.0.0:8000 --workers 3')">
+                                    <i class="far fa-clipboard"></i>
+                                </button>
+                            </div>
+                            <ul>
+                                <li>Performances optimisées</li>
+                                <li>Meilleure gestion des requêtes concurrentes</li>
+                                <li>Configuration sécurisée (DEBUG=False)</li>
+                                <li>Serveur multi-processus</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="card">
+            <div class="card-header">
+                <h2>Passer en mode Production</h2>
+            </div>
+            <div class="card-body">
+                <p>Pour passer du mode Développement au mode Production, suivez ces étapes :</p>
+                
+                <div class="steps-grid">
+                    <div class="step-card">
+                        <div class="step-number">1</div>
+                        <h4 class="step-title">Modifier le Dockerfile</h4>
+                        <div class="step-content">
+                            <p>Remplacez la commande de démarrage :</p>
+                            <div class="command">
+                                CMD ["python", "manage.py", "runserver", "0.0.0.0:8000"]
+                            </div>
+                            <p>Par :</p>
+                            <div class="command">
+                                CMD ["gunicorn", "core.wsgi:application", "--bind", "0.0.0.0:8000", "--workers", "3"]
+                            </div>
+                            <p>Ajoutez également l'installation de Gunicorn :</p>
+                            <div class="command">
+                                RUN pip install --no-cache-dir gunicorn
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="step-card">
+                        <div class="step-number">2</div>
+                        <h4 class="step-title">Configurer Django</h4>
+                        <div class="step-content">
+                            <p>Dans <code>core/settings.py</code> :</p>
+                            <div class="command">
+                                # Passez en mode production
+                                DEBUG = False
+                                
+                                # Configurez les hôtes autorisés
+                                ALLOWED_HOSTS = ['votre-domaine.com', 'www.votre-domaine.com']
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="step-card">
+                        <div class="step-number">3</div>
+                        <h4 class="step-title">Collecter les fichiers statiques</h4>
+                        <div class="step-content">
+                            <div class="command">
+                                docker-compose exec web python manage.py collectstatic --noinput
+                                <button class="command-copy" onclick="navigator.clipboard.writeText('docker-compose exec web python manage.py collectstatic --noinput')">
+                                    <i class="far fa-clipboard"></i>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="step-card">
+                        <div class="step-number">4</div>
+                        <h4 class="step-title">Reconstruire et redémarrer</h4>
+                        <div class="step-content">
+                            <div class="command">
+                                docker-compose build web
+                                <button class="command-copy" onclick="navigator.clipboard.writeText('docker-compose build web')">
+                                    <i class="far fa-clipboard"></i>
+                                </button>
+                            </div>
+                            <div class="command">
+                                docker-compose up -d
+                                <button class="command-copy" onclick="navigator.clipboard.writeText('docker-compose up -d')">
+                                    <i class="far fa-clipboard"></i>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <footer class="footer">
+        <div class="container">
+            <p>DockerDjangoBase - Une base solide pour vos projets Django avec Docker</p>
+            <p>&copy; 2025</p>
+        </div>
+    </footer>
+
+    <script>
+        // Pour les boutons de copie
+        document.querySelectorAll('.command-copy').forEach(button => {
+            button.addEventListener('click', function() {
+                const command = this.parentElement.textContent.trim();
+                navigator.clipboard.writeText(command);
+                
+                const icon = this.querySelector('i');
+                icon.classList.remove('far', 'fa-clipboard');
+                icon.classList.add('fas', 'fa-check');
+                
+                setTimeout(() => {
+                    icon.classList.remove('fas', 'fa-check');
+                    icon.classList.add('far', 'fa-clipboard');
+                }, 2000);
+            });
+        });
+    </script>
+</body>
+</html> 
