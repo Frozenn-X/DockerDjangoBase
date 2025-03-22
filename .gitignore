@@ -65,6 +65,8 @@ media
 
 # Static files (générés par collectstatic)
 /staticfiles/
+/README*.md
+
 
 # Environnements virtuels
 venv/

@@ -34,7 +34,7 @@ Ce template offre un environnement de développement Django complet et prêt à 
 ### Installation
 1. Clonez ce dépôt :
    ```bash
-   git clone https://github.com/yourusername/DockerDjangoBase.git
+   git clone https://github.com/Frozenn-X/DockerDjangoBase.git
    cd DockerDjangoBase
    ```
 
@@ -81,10 +81,38 @@ Le projet inclut un système d'authentification par token custom:
 ## 📝 Personnalisation
 Pour adapter ce template à vos besoins:
 
-1. Modifiez les informations de connexion aux bases de données dans `docker-compose.yml`
-2. Ajoutez vos propres applications Django
-3. Personnalisez le modèle utilisateur dans `_auth/models.py` selon vos besoins
-4. Configurez les permissions et les endpoints API selon votre cas d'usage
+1. Modifiez les informations de connexion aux bases de données dans `docker-compose.yml`:
+   ```yaml
+   # Pour MySQL
+   environment:
+     - MYSQL_ROOT_PASSWORD=your-secure-password
+     - MYSQL_DATABASE=your_db_name
+     - MYSQL_USER=your_username
+     - MYSQL_PASSWORD=your_password
+   
+   # Pour MongoDB
+   environment:
+     - MONGO_INITDB_ROOT_USERNAME=your_admin_user
+     - MONGO_INITDB_ROOT_PASSWORD=your_secure_password
+   ```
+
+2. Ajustez les paramètres ALLOWED_HOSTS dans `core/settings.py` selon votre environnement:
+   ```python
+   # Développement local
+   ALLOWED_HOSTS = ['localhost', '127.0.0.1']
+   
+   # Pour un accès sur réseau local
+   ALLOWED_HOSTS = ['localhost', '127.0.0.1']
+   
+   # Pour production avec domaine
+   ALLOWED_HOSTS = ['votredomaine.com', 'www.votredomaine.com']
+   ```
+
+3. Ajoutez vos propres applications Django
+
+4. Personnalisez le modèle utilisateur dans `_auth/models.py` selon vos besoins
+
+5. Configurez les permissions et les endpoints API selon votre cas d'usage
 
 ## 🤝 Contribution
 Les contributions sont les bienvenues! N'hésitez pas à soumettre des pull requests ou ouvrir des issues.
