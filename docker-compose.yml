@@ -1,0 +1,62 @@
+services:
+  db_mysql_core:
+    image: mysql:8
+    container_name: db_mysql_core
+    ports:
+      - "3306:3306"  # Expose le port 3306 à l'extérieur
+    environment:
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
+      MYSQL_DATABASE: ${MYSQL_DATABASE}
+      MYSQL_USER: ${MYSQL_USER}
+      MYSQL_PASSWORD: ${MYSQL_PASSWORD}
+    volumes:
+      - mysql_data:/var/lib/mysql
+    networks:
+      - app_network
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-u", "root", "-p${MYSQL_ROOT_PASSWORD}"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  db_mongo_core:
+    image: mongo:latest
+    container_name: db_mongo_core
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: ${MONGO_INITDB_ROOT_USERNAME}
+      MONGO_INITDB_ROOT_PASSWORD: ${MONGO_INITDB_ROOT_PASSWORD}
+    volumes:
+      - mongo_data:/data/db
+    networks:
+      - app_network
+    ports:
+      - "27017:27017"  # Expose le port MongoDB (de 27017 à 27017)
+
+  web:
+    depends_on:
+      db_mysql_core:
+        condition: service_healthy
+      db_mongo_core:
+        condition: service_started
+    build:
+      context: .
+      dockerfile: Dockerfile  # Assure-toi que le Dockerfile est à la racine
+    container_name: django_web_core
+    volumes:
+      - .:/app
+    ports:
+      - "8000:8000"
+    tty: true  # Active le terminal
+    networks:
+      - app_network
+    # environment:
+    env_file:
+      - .env
+
+networks:
+  app_network:
+    driver: bridge
+
+volumes:
+  mysql_data:
+  mongo_data:
