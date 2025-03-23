@@ -23,9 +23,12 @@ class UserViewSet(viewsets.ModelViewSet):
     authentication_classes = [TokenAuthentication]
 
     def get_queryset(self):
+        # Garantir qu'un utilisateur normal ne voit que lui-même
         if self.request.user.is_superuser:
             return User.objects.all()
-        return User.objects.filter(id=self.request.user.id)
+        else:
+            # Retourner explicitement un queryset contenant uniquement l'utilisateur connecté
+            return User.objects.filter(id=self.request.user.id)
 
 class UserPermissionViewSet(viewsets.ModelViewSet):
     queryset = UserPermission.objects.all()

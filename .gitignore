@@ -99,3 +99,4 @@ node_modules/
 .cache/
 .mypy_cache/
 .pytest_cache/
+tryedrule.*

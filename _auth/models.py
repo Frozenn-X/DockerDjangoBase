@@ -4,6 +4,7 @@ from mongoengine import Document, StringField, DateTimeField, DictField, Referen
 from datetime import datetime, timedelta
 import pytz
 import secrets
+from django.utils import timezone
 
 
 class User(AbstractUser):
@@ -105,7 +106,7 @@ class AuthToken(models.Model):
     
     def is_valid(self):
         """Vérifie si le token est valide (actif et non expiré)"""
-        return self.is_active and self.expires_at > datetime.now()
+        return self.is_active and self.expires_at > timezone.now()
     
     @classmethod
     def generate_token(cls, user, expiry_days=7):
@@ -115,7 +116,7 @@ class AuthToken(models.Model):
         
         # Crée un nouveau token
         token = secrets.token_hex(32)  # 64 caractères
-        expires_at = datetime.now() + timedelta(days=expiry_days)
+        expires_at = timezone.now() + timedelta(days=expiry_days)
         
         return cls.objects.create(
             user=user,
@@ -128,7 +129,7 @@ class AuthToken(models.Model):
         """Récupère l'utilisateur associé à un token valide"""
         try:
             token_obj = cls.objects.get(token=token, is_active=True)
-            if token_obj.expires_at > datetime.now():
+            if token_obj.expires_at > timezone.now():
                 return token_obj.user
             else:
                 # Désactive le token expiré

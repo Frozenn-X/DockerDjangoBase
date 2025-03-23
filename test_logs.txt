@@ -1,0 +1,135 @@
+===== DJANGO TEST LOGS - Sun Mar 23 00:49:52 UTC 2025 =====
+Environnement: Linux ubuntu 6.8.0-55-generic #57-Ubuntu SMP PREEMPT_DYNAMIC Wed Feb 12 23:42:21 UTC 2025 x86_64 x86_64 x86_64 GNU/Linux
+Python: Python 3.12.3
+Django: 5.1.5
+=====================================
+
+[0;34mExécution des tests unitaires avec verbosité maximale...[0m
+[0;34mLes résultats seront sauvegardés dans test_logs.txt[0m
+[0m
+Creating test database for alias 'default' ('file:memorydb_default?mode=memory&cache=shared')...
+Found 17 test(s).
+Operations to perform:
+  Synchronize unmigrated apps: corsheaders, messages, rest_framework, staticfiles
+  Apply all migrations: _auth, admin, auth, contenttypes, sessions
+Running pre-migrate handlers for application admin
+Running pre-migrate handlers for application auth
+Running pre-migrate handlers for application contenttypes
+Running pre-migrate handlers for application sessions
+Running pre-migrate handlers for application _auth
+Synchronizing apps without migrations:
+  Creating tables...
+    Running deferred SQL...
+Running migrations:
+  Applying contenttypes.0001_initial... OK (0.004s)
+  Applying contenttypes.0002_remove_content_type_name... OK (0.005s)
+  Applying auth.0001_initial... OK (0.007s)
+  Applying auth.0002_alter_permission_name_max_length... OK (0.004s)
+  Applying auth.0003_alter_user_email_max_length... OK (0.003s)
+  Applying auth.0004_alter_user_username_opts... OK (0.003s)
+  Applying auth.0005_alter_user_last_login_null... OK (0.004s)
+  Applying auth.0006_require_contenttypes_0002... OK (0.000s)
+  Applying auth.0007_alter_validators_add_error_messages... OK (0.003s)
+  Applying auth.0008_alter_user_username_max_length... OK (0.003s)
+  Applying auth.0009_alter_user_last_name_max_length... OK (0.003s)
+  Applying auth.0010_alter_group_name_max_length... OK (0.004s)
+  Applying auth.0011_update_proxy_permissions... OK (0.003s)
+  Applying auth.0012_alter_user_first_name_max_length... OK (0.003s)
+  Applying _auth.0001_initial... OK (0.010s)
+  Applying _auth.0002_authtoken... OK (0.006s)
+  Applying admin.0001_initial... OK (0.006s)
+  Applying admin.0002_logentry_remove_auto_add... OK (0.010s)
+  Applying admin.0003_logentry_add_action_flag_choices... OK (0.006s)
+  Applying sessions.0001_initial... OK (0.001s)
+Running post-migrate handlers for application admin
+Adding content type 'admin | logentry'
+Adding permission 'Permission object (1)'
+Adding permission 'Permission object (2)'
+Adding permission 'Permission object (3)'
+Adding permission 'Permission object (4)'
+Running post-migrate handlers for application auth
+Adding content type 'auth | permission'
+Adding content type 'auth | group'
+Adding permission 'Permission object (5)'
+Adding permission 'Permission object (6)'
+Adding permission 'Permission object (7)'
+Adding permission 'Permission object (8)'
+Adding permission 'Permission object (9)'
+Adding permission 'Permission object (10)'
+Adding permission 'Permission object (11)'
+Adding permission 'Permission object (12)'
+Running post-migrate handlers for application contenttypes
+Adding content type 'contenttypes | contenttype'
+Adding permission 'Permission object (13)'
+Adding permission 'Permission object (14)'
+Adding permission 'Permission object (15)'
+Adding permission 'Permission object (16)'
+Running post-migrate handlers for application sessions
+Adding content type 'sessions | session'
+Adding permission 'Permission object (17)'
+Adding permission 'Permission object (18)'
+Adding permission 'Permission object (19)'
+Adding permission 'Permission object (20)'
+Running post-migrate handlers for application _auth
+Adding content type '_auth | user'
+Adding content type '_auth | userpermission'
+Adding content type '_auth | authtoken'
+Adding permission 'Permission object (21)'
+Adding permission 'Permission object (22)'
+Adding permission 'Permission object (23)'
+Adding permission 'Permission object (24)'
+Adding permission 'Permission object (25)'
+Adding permission 'Permission object (26)'
+Adding permission 'Permission object (27)'
+Adding permission 'Permission object (28)'
+Adding permission 'Permission object (29)'
+Adding permission 'Permission object (30)'
+Adding permission 'Permission object (31)'
+Adding permission 'Permission object (32)'
+System check identified no issues (0 silenced).
+test_login_inactive_user (_auth.tests.LoginEndpointTest.test_login_inactive_user)
+Test de connexion avec un utilisateur inactif ... ok
+test_login_invalid_credentials (_auth.tests.LoginEndpointTest.test_login_invalid_credentials)
+Test de connexion avec des identifiants invalides ... ok
+test_login_valid_credentials (_auth.tests.LoginEndpointTest.test_login_valid_credentials)
+Test de connexion avec des identifiants valides ... ok
+test_logout_authenticated_user (_auth.tests.LogoutEndpointTest.test_logout_authenticated_user)
+Test de déconnexion avec un utilisateur authentifié ... ok
+test_logout_unauthenticated_user (_auth.tests.LogoutEndpointTest.test_logout_unauthenticated_user)
+Test de déconnexion sans authentification ... ok
+test_register_duplicate_username (_auth.tests.RegisterEndpointTest.test_register_duplicate_username)
+Test d'inscription avec un nom d'utilisateur déjà existant ... ok
+test_register_invalid_password_confirm (_auth.tests.RegisterEndpointTest.test_register_invalid_password_confirm)
+Test d'inscription avec confirmation de mot de passe non correspondante ... ok
+test_register_valid_user (_auth.tests.RegisterEndpointTest.test_register_valid_user)
+Test d'inscription avec des données valides ... ok
+test_generate_new_token (_auth.tests.TokenEndpointTest.test_generate_new_token)
+Test pour générer un nouveau token ... ok
+test_get_token_info (_auth.tests.TokenEndpointTest.test_get_token_info)
+Test pour récupérer les informations du token ... ok
+test_create_permission (_auth.tests.UserPermissionViewSetTest.test_create_permission)
+Test de création d'une nouvelle permission ... ok
+test_list_permissions_as_admin (_auth.tests.UserPermissionViewSetTest.test_list_permissions_as_admin)
+Test de récupération de toutes les permissions en tant qu'admin ... /home/frozen/dev_projects/DockerDjangoBase/venv/lib/python3.12/site-packages/rest_framework/pagination.py:207: UnorderedObjectListWarning: Pagination may yield inconsistent results with an unordered object_list: <class '_auth.models.UserPermission'> QuerySet.
+  paginator = self.django_paginator_class(queryset, page_size)
+ok
+test_list_permissions_as_regular_user (_auth.tests.UserPermissionViewSetTest.test_list_permissions_as_regular_user)
+Test de récupération des permissions en tant qu'utilisateur normal ... ok
+test_get_user_detail (_auth.tests.UserViewSetTest.test_get_user_detail)
+Test de récupération des détails d'un utilisateur ... ok
+test_list_users_as_admin (_auth.tests.UserViewSetTest.test_list_users_as_admin)
+Test de récupération de tous les utilisateurs en tant qu'admin ... /home/frozen/dev_projects/DockerDjangoBase/venv/lib/python3.12/site-packages/rest_framework/pagination.py:207: UnorderedObjectListWarning: Pagination may yield inconsistent results with an unordered object_list: <class '_auth.models.User'> QuerySet.
+  paginator = self.django_paginator_class(queryset, page_size)
+ok
+test_list_users_as_regular_user (_auth.tests.UserViewSetTest.test_list_users_as_regular_user)
+Test de récupération des utilisateurs en tant qu'utilisateur normal ... ok
+test_update_user_detail (_auth.tests.UserViewSetTest.test_update_user_detail)
+Test de mise à jour des détails d'un utilisateur ... ok
+
+----------------------------------------------------------------------
+Ran 17 tests in 0.093s
+
+OK
+Destroying test database for alias 'default' ('file:memorydb_default?mode=memory&cache=shared')...
+[0;32mLes tests ont réussi ![0m
+[0;32mRésultats enregistrés dans test_logs.txt[0m

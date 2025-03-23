@@ -60,14 +60,26 @@ Pour passer en mode production, suivez les étapes détaillées dans la [documen
 ## 📁 Structure du projet
 ```
 DockerDjangoBase/
-├── core/                 # Configuration principale du projet
-├── _auth/                # Système d'authentification personnalisé
-├── templates/            # Templates HTML
-├── static/               # Fichiers statiques
-├── media/                # Fichiers téléchargés
-├── docker-compose.yml    # Configuration Docker Compose
-├── Dockerfile            # Configuration de l'image Docker
-└── requirements.txt      # Dépendances Python
+├── core/                 # Main Django configuration
+│   ├── settings.py       # Main settings
+│   ├── test_settings.py  # Test settings (SQLite)
+│   ├── docker_test_settings.py # Docker test settings
+│   ├── urls.py           # Main URL routing
+│   ├── router.py         # Database router
+│   └── wsgi.py, asgi.py  # WSGI/ASGI configurations
+├── _auth/                # Custom authentication app
+│   ├── models.py         # User and permission models
+│   ├── views.py          # API views
+│   ├── authentication.py # Token authentication
+│   ├── urls.py           # Auth endpoints
+│   └── tests.py          # Authentication tests
+├── templates/            # HTML templates
+├── static/               # Static files
+├── docker-compose.yml    # Docker composition
+├── Dockerfile            # Web service configuration
+├── docker-entrypoint.sh  # Container initialization
+├── requirements.txt      # Python dependencies
+└── .env                  # Environment variables
 ```
 
 ## 🔍 Authentification API
@@ -118,4 +130,37 @@ Pour adapter ce template à vos besoins:
 Les contributions sont les bienvenues! N'hésitez pas à soumettre des pull requests ou ouvrir des issues.
 
 ## 📄 Licence
-Ce projet est sous licence [MIT](LICENSE). 
+Ce projet est sous licence [MIT](LICENSE).
+
+## Exécution des tests
+
+Le projet comprend des tests unitaires et d'intégration, avec deux modes d'exécution.
+
+### Tests unitaires rapides (développement)
+
+Pour exécuter les tests unitaires rapidement pendant le développement, utilisez la commande suivante :
+
+```bash
+# Utilise SQLite en mémoire au lieu de MySQL et désactive MongoDB
+DJANGO_SETTINGS_MODULE=core.test_settings python manage.py test _auth
+```
+
+Cette méthode utilise une configuration alternative qui remplace MySQL par SQLite et désactive les connexions MongoDB, ce qui rend les tests beaucoup plus rapides.
+
+#### Avec logs détaillés
+
+Pour exécuter les tests avec un niveau de verbosité maximum et enregistrer les résultats dans un fichier `test_logs.txt`, utilisez le script suivant :
+
+```bash
+./run_tests_with_logs.sh
+```
+
+Ce script exécute les tests avec le niveau de verbosité 3 (maximum) et enregistre tous les détails d'exécution, y compris les informations sur l'environnement et les résultats complets des tests.
+
+> **Note**: Vous pouvez voir des avertissements de pagination (`UnorderedObjectListWarning`) pendant les tests. Cet avertissement est normal et indique simplement que les résultats paginés pourraient être incohérents si l'ordre n'est pas défini. Dans le contexte des tests, cela n'a pas d'impact sur les résultats.
+> 
+> ```
+> UnorderedObjectListWarning: Pagination may yield inconsistent results with an unordered object_list: <class '_auth.models.UserPermission'> QuerySet.
+> ```
+> 
+> Ces avertissements apparaissent car Django REST Framework utilise la pagination sur des QuerySets qui n'ont pas d'ordre explicite (`.order_by()`). Pour les supprimer en production, vous pouvez définir un ordre par défaut dans la Meta classe de vos modèles ou ajouter `.order_by('id')` dans les méthodes `get_queryset()` de vos ViewSets.

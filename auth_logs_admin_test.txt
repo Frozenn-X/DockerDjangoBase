@@ -1,3 +1,0 @@
-user : admin
-mdp : admin 
-role : staff, superuser
